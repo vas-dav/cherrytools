@@ -29,6 +29,7 @@
 
 // minimal includes
 #include <stdio.h>
+#include <stdarg.h>
 
 // internal debug defines
 #ifdef HIGH_PRIORITY_DEBUG
@@ -38,5 +39,23 @@
 #define INT_ASSERT(statement) 
 #endif
 
+#define C_INFO "\x1b[33mINFO\x1b[0m"
+
+#define _CHERRY_STREAMOUT(message, message_length)              \
+    INT_ASSERT(message_length > 0);                             \
+    fwrite(message, sizeof(char), message_length, stdout);      \
+
+#define _GENERATE_MESSAGE(status, location, line, log_args)
+
+#define CHERRY_INFO(...)                                        \
+    _GENERATE_MESSAGE(C_INFO, __FILE__, __LINE__, __VA_ARGS__)  \
+
+#define CHERRY_WARN(...)                                        \
+    //TODO
+
+#define CHERRY_ERROR(...)                                       \
+    //TODO
+
+//TODO: CHERRY_DEBUG
 
 #endif
