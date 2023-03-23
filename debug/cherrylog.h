@@ -24,5 +24,13 @@
  * IN THE SOFTWARE.
  */
 
+// minimal includes
 #include <stdio.h>
 
+// internal debug defines
+#ifdef HIGH_PRIORITY_DEBUG
+#include <assert.h>
+#define INT_ASSERT(statement) assert(statement)
+#else
+#define INT_ASSERT(statement) 
+#endif
