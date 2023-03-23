@@ -24,6 +24,9 @@
  * IN THE SOFTWARE.
  */
 
+#ifndef _CHERRYLOG_H_
+#define _CHERRYLOG_H_
+
 // minimal includes
 #include <stdio.h>
 
@@ -33,4 +36,7 @@
 #define INT_ASSERT(statement) assert(statement)
 #else
 #define INT_ASSERT(statement) 
+#endif
+
+
 #endif
