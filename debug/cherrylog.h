@@ -44,6 +44,7 @@
 #define _CHERRY_STREAMOUT(message, message_length)              \
     INT_ASSERT(message_length > 0);                             \
     fwrite(message, sizeof(char), message_length, stdout);      \
+    fflush(stdout);                                             \
 
 #define _GENERATE_MESSAGE(status, location, line, log_args)
 
