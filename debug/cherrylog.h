@@ -41,15 +41,38 @@
 
 #define C_INFO "\x1b[33mINFO\x1b[0m"
 
+#define CHERRY_BUFFER_MAX_CAP 500
+#define CHERRY_MESSAGE_MAX_CAP 150
+
 #define _CHERRY_STREAMOUT(message, message_length)              \
     INT_ASSERT(message_length > 0);                             \
     fwrite(message, sizeof(char), message_length, stdout);      \
     fflush(stdout);                                             \
 
-#define _GENERATE_MESSAGE(status, location, line, log_args)
+void construct_log(const char * _status,
+                   const char * _location,
+                   const size_t _line,
+                   const char * _fmt, ...)
+{
+    va_list args;
+    va_start(args, _fmt);
+    char message [CHERRY_BUFFER_MAX_CAP] = {0};
+    int message_len = vsnprintf(message, CHERRY_BUFFER_MAX_CAP, _fmt, args);
+    va_end(args);
+    char buffer [CHERRY_BUFFER_MAX_CAP] = {0};
+    int buffer_len = snprintf(buffer, CHERRY_BUFFER_MAX_CAP,
+                             "[%s] [File: %s] [Line: %d] %.*s\n",
+                             _status,
+                             _location,
+                             _line,
+                             message_len,
+                             message);
+    _CHERRY_STREAMOUT(buffer, buffer_len)
+    
+}
 
-#define CHERRY_INFO(...)                                        \
-    _GENERATE_MESSAGE(C_INFO, __FILE__, __LINE__, __VA_ARGS__)  \
+#define CHERRY_INFO(fmt, ...)                                        \
+    construct_log(C_INFO, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
 
 #define CHERRY_WARN(...)                                        \
     //TODO
