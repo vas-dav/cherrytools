@@ -4,7 +4,8 @@
 int main()
 {
     CHERRY_INFO("Start of main in log examples");
-    CHERRY_INFO("Lisa is beauty")
+    CHERRY_WARNING("Get a warn");
+    CHERRY_ERROR("This is it!");
         
     return 0;
 }

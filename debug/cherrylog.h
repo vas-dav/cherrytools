@@ -39,7 +39,9 @@
 #define INT_ASSERT(statement) 
 #endif
 
-#define C_INFO "\x1b[33mINFO\x1b[0m"
+#define C_INFO "\x1b[34mINFO\x1b[0m"
+#define C_WARN "\x1b[33mWARNING\x1b[0m"
+#define C_ERROR "\x1b[31mERROR\x1b[0m"
 
 #define CHERRY_BUFFER_MAX_CAP 500
 #define CHERRY_MESSAGE_MAX_CAP 150
@@ -74,11 +76,11 @@ void construct_log(const char * _status,
 #define CHERRY_INFO(fmt, ...)                                        \
     construct_log(C_INFO, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
 
-#define CHERRY_WARN(...)                                        \
-    //TODO
+#define CHERRY_WARNING(fmt, ...)                                        \
+    construct_log(C_WARN, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
 
-#define CHERRY_ERROR(...)                                       \
-    //TODO
+#define CHERRY_ERROR(fmt, ...)                                       \
+    construct_log(C_ERROR, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
 
 //TODO: CHERRY_DEBUG
 
