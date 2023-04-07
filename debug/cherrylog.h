@@ -51,7 +51,7 @@
     fwrite(message, sizeof(char), message_length, stdout);      \
     fflush(stdout);                                             \
 
-void construct_log(const char * _status,
+static void construct_log(const char * _status,
                    const char * _location,
                    const size_t _line,
                    const char * _fmt, ...)
