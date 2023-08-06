@@ -1,5 +1,5 @@
 /*
- * FILE: CHERRYLOG.H
+ * FILE: LEAKTRACERLOG.H
  *
  * MIT License
  *
@@ -24,8 +24,8 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef _CHERRYLOG_H_
-#define _CHERRYLOG_H_
+#ifndef _LEAKTRACER_LOG_H_
+#define _LEAKTRACER_LOG_H_
 
 // minimal includes
 #include <stdio.h>
@@ -42,46 +42,49 @@
 #define C_INFO "\x1b[34mINFO\x1b[0m"
 #define C_WARN "\x1b[33mWARNING\x1b[0m"
 #define C_ERROR "\x1b[31mERROR\x1b[0m"
+#define C_DEBUG "\x1b[35mDEBUG\x1b[0m"
 
-#define CHERRY_BUFFER_MAX_CAP 500
-#define CHERRY_MESSAGE_MAX_CAP 150
+#define LEAKTRACER_BUFFER_MAX_CAP 500
+#define LEAKTRACER_MESSAGE_MAX_CAP 150
 
-#define _CHERRY_STREAMOUT(message, message_length)              \
+#define _LEAKTRACER_STREAMOUT(message, message_length)              \
     INT_ASSERT(message_length > 0);                             \
     fwrite(message, sizeof(char), message_length, stdout);      \
     fflush(stdout);                                             \
 
-static void construct_log(const char * _status,
+static void create_log_line(const char * _status,
                    const char * _location,
                    const size_t _line,
                    const char * _fmt, ...)
 {
     va_list args;
     va_start(args, _fmt);
-    char message [CHERRY_BUFFER_MAX_CAP] = {0};
-    int message_len = vsnprintf(message, CHERRY_BUFFER_MAX_CAP, _fmt, args);
+    char message [LEAKTRACER_BUFFER_MAX_CAP] = {0};
+    int message_len = vsnprintf(message, LEAKTRACER_BUFFER_MAX_CAP, _fmt, args);
     va_end(args);
-    char buffer [CHERRY_BUFFER_MAX_CAP] = {0};
-    int buffer_len = snprintf(buffer, CHERRY_BUFFER_MAX_CAP,
-                             "[%s] [File: %s] [Line: %d] %.*s\n",
+    char buffer [LEAKTRACER_BUFFER_MAX_CAP] = {0};
+    int buffer_len = snprintf(buffer, LEAKTRACER_BUFFER_MAX_CAP,
+                             "[%s] [File: %s] [Line: %ld] %.*s\n",
                              _status,
                              _location,
                              _line,
                              message_len,
                              message);
-    _CHERRY_STREAMOUT(buffer, buffer_len)
+    _LEAKTRACER_STREAMOUT(buffer, buffer_len)
     
 }
 
-#define CHERRY_INFO(fmt, ...)                                        \
-    construct_log(C_INFO, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
+#define LEAKTRACER_INFO(fmt, ...)                                        \
+    create_log_line(C_INFO, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
 
-#define CHERRY_WARNING(fmt, ...)                                        \
-    construct_log(C_WARN, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
+#define LEAKTRACER_WARNING(fmt, ...)                                        \
+    create_log_line(C_WARN, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
 
-#define CHERRY_ERROR(fmt, ...)                                       \
-    construct_log(C_ERROR, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
+#define LEAKTRACER_ERROR(fmt, ...)                                       \
+    create_log_line(C_ERROR, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
 
-//TODO: CHERRY_DEBUG
+#define LEAKTRACER_DEBUG(fmt, ...)                                       \
+    create_log_line(C_DEBUG, __FILE__, __LINE__, fmt, ##__VA_ARGS__);  \
+
 
 #endif
